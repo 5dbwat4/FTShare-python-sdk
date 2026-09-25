@@ -1,8 +1,7 @@
-name: Publish to PyPI
+name: Publish to TestPyPI
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,13 +23,13 @@ jobs:
           name: dist
           path: dist/
 
-  publish:
-    name: Publish to PyPI
+  publish-to-testpypi:
+    name: Publish to TestPyPI
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: pypi
-      url: https://pypi.org/p/ftshare
+      name: testpypi
+      url: https://test.pypi.org/p/ftshare
     permissions:
       id-token: write
     steps:
@@ -39,5 +38,7 @@ jobs:
         with:
           name: dist
           path: dist/
-      - name: Publish to PyPI
+      - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
